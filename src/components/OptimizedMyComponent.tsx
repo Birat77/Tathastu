@@ -26,6 +26,16 @@ const MyComponent = ({ data }: MyComponentProps) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (searchTerm) {
+      setIsSearching(true);
+      const timer = setTimeout(() => {
+        setIsSearching(false);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [searchTerm]);
+
   const filteredData = useMemo(() => {
     if (!searchTerm) {
       return data;
@@ -50,16 +60,6 @@ const MyComponent = ({ data }: MyComponentProps) => {
   const handleClear = useCallback(() => {
     setSearchTerm('');
   }, []);
-
-  useEffect(() => {
-    if (searchTerm) {
-      setIsSearching(true);
-      const timer = setTimeout(() => {
-        setIsSearching(false);
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [searchTerm]);
 
   const renderItem: ListRenderItem<Item> = useCallback(
     ({item}) => (
